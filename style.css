@@ -1,0 +1,193 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Lato:wght@300;400;700&display=swap');
+
+
+   body {
+    font-family: 'Lato', sans-serif;
+    background: radial-gradient(ellipse at 20% 50%, #1a0f2e 0%, #0a0d1a 40%, #060810 100%);
+    background-attachment: fixed;
+    padding: 30px;
+    min-height: 100vh;
+}
+
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 15, 25, 0.55);
+    backdrop-filter: blur(1px);
+    z-index: 0;
+    pointer-events: none;
+}
+
+body > * {
+    position: relative;
+    z-index: 1;
+}
+
+h1 {
+    font-family: 'Cinzel', serif;
+    font-weight: 800;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    text-align: center;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #f0ece4;
+    text-shadow:
+        0 0 40px rgba(180, 140, 60, 0.7),
+        0 2px 8px rgba(0,0,0,0.8);
+    margin-bottom: 50px;
+}
+
+h1::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+    margin: 14px auto 0;
+}
+
+.projets {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 28px;
+}
+
+.projet {
+    background: rgba(15, 20, 35, 0.72);
+    border: 1px solid rgba(201, 168, 76, 0.35);
+    padding: 32px 24px;
+    width: 260px;
+    border-radius: 4px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    box-shadow:
+        0 8px 32px rgba(0,0,0,0.5),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.projet:hover {
+    transform: translateY(-6px);
+    box-shadow:
+        0 16px 48px rgba(0,0,0,0.6),
+        0 0 0 1px rgba(201, 168, 76, 0.5);
+    border-color: rgba(201, 168, 76, 0.6);
+}
+
+.projet h2 {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    letter-spacing: 0.08em;
+    color: #e8d9a0;
+    margin-bottom: 14px;
+}
+
+.projet p {
+    font-size: 0.9rem;
+    color: rgba(240, 236, 228, 0.75);
+    line-height: 1.6;
+    margin-bottom: 22px;
+}
+
+button {
+    padding: 11px 22px;
+    border: 1px solid rgba(201, 168, 76, 0.6);
+    background: linear-gradient(135deg, rgba(201, 168, 76, 0.2), rgba(201, 168, 76, 0.08));
+    color: #e8d9a0;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(201, 168, 76, 0.4), rgba(201, 168, 76, 0.15));
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+button:hover {
+    border-color: rgba(201, 168, 76, 0.95);
+    color: #fff8e0;
+    box-shadow: 0 0 18px rgba(201, 168, 76, 0.35);
+}
+
+button:hover::before {
+    opacity: 1;
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+.btn-annuler {
+    margin-top: 8px;
+    background: transparent;
+    border: 1px solid rgba(255, 82, 82, 0.5);
+    color: rgba(255, 150, 150, 0.8);
+}
+
+.btn-annuler:hover {
+    border-color: rgba(255, 82, 82, 0.9);
+    color: #ff6b6b;
+    box-shadow: 0 0 18px rgba(255, 82, 82, 0.25);
+}
+
+.resultat {
+    margin-top: 14px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    letter-spacing: 0.06em;
+    color: #c9a84c;
+    text-shadow: 0 0 12px rgba(201, 168, 76, 0.5);
+    min-height: 1.2em;
+}
+
+.phase {
+    cursor: pointer;
+}
+
+.badge {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: rgba(201, 168, 76, 0.2);
+    border: 1px solid rgba(201, 168, 76, 0.6);
+    color: #c9a84c;
+}
+
+.btn-retour {
+    display: inline-block;
+    margin-bottom: 30px;
+    cursor: pointer;
+    color: #c9a84c;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.88rem;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.3);
+    padding-bottom: 2px;
+    transition: border-color 0.2s;
+}
+
+.btn-retour:hover {
+    border-color: rgba(201, 168, 76, 0.9);
+}

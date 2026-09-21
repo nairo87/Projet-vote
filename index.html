@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phases de vote</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<h1>Phases de vote</h1>
+
+<div class="projets" id="liste-phases"></div>
+
+<a href="admin.html" style="position:fixed;bottom:18px;right:22px;font-size:0.72rem;color:rgba(201,168,76,0.3);text-decoration:none;letter-spacing:0.1em;transition:color 0.2s;" onmouseover="this.style.color='rgba(201,168,76,0.8)'" onmouseout="this.style.color='rgba(201,168,76,0.3)'">⚙ admin</a>
+
+<script>
+const configDefaut = {
+    phases: {
+        1: { titre: "Phase 1", desc: "Projets écologie & mobilité" },
+        2: { titre: "Phase 2", desc: "Projets éducation & culture" },
+        3: { titre: "Phase 3", desc: "Projets tech & innovation" }
+    }
+};
+
+const saved = localStorage.getItem('admin_vote_config');
+const config = saved ? JSON.parse(saved) : configDefaut;
+const phases = config.phases || configDefaut.phases;
+
+const container = document.getElementById('liste-phases');
+
+const keys = Object.keys(phases);
+if (keys.length === 0) {
+    container.innerHTML = '<p style="color:rgba(240,236,228,0.5);text-align:center;">Aucune phase disponible.</p>';
+} else {
+    container.innerHTML = keys.map(k => `
+        <div class="projet phase active" onclick="window.location.href='vote.html?phase=${k}'">
+            <h2>${phases[k].titre}</h2>
+            <p>${phases[k].desc}</p>
+            <span class="badge">Active</span>
+        </div>
+    `).join('');
+}
+</script>
+
+</body>
+</html>

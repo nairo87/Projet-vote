@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        #btn-admin {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(201,168,76,0.6);
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #e8d9a0;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            transition: all 0.2s ease;
+        }
+        #btn-admin:hover {
+            background: rgba(201,168,76,0.2);
+            border-color: rgba(201,168,76,0.9);
+        }
+
+        #resultats {
+            display: none;
+            margin-top: 40px;
+            padding: 25px;
+            background: rgba(15,20,35,0.85);
+            border: 1px dashed rgba(201,168,76,0.6);
+            border-radius: 8px;
+            width: 350px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        }
+        #resultats h2 {
+            color: #e8d9a0;
+            font-family: 'Cinzel', serif;
+            margin-bottom: 20px;
+        }
+        #resultats p {
+            color: #c9a84c;
+            font-weight: 700;
+            margin: 8px 0;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<a class="btn-retour" onclick="history.back()">← Retour</a>
+<h1 id="titre-phase">Vote</h1>
+
+<button id="btn-admin" onclick="admin()">Résultat</button>
+
+<!-- Lien discret vers la console admin -->
+<a href="admin.html" style="position:fixed;bottom:18px;right:22px;font-size:0.72rem;color:rgba(201,168,76,0.3);text-decoration:none;letter-spacing:0.1em;transition:color 0.2s;" onmouseover="this.style.color='rgba(201,168,76,0.8)'" onmouseout="this.style.color='rgba(201,168,76,0.3)'">⚙ admin</a>
+
+<div class="projets" id="liste-projets"></div>
+
+<div id="resultats">
+    <h2>Résultats</h2>
+    <p id="r1"></p>
+    <p id="r2"></p>
+    <p id="r3"></p>
+</div>
+
+<script>
+
+const phases = {
+    1: {
+        titre: "Phase 1 — Écologie & Mobilité",
+        projets: [
+            { id: "projet1", nom: "Projet 1", desc: "Application mobile pour l'écologie" },
+            { id: "projet2", nom: "Projet 2", desc: "Solution de covoiturage local" },
+            { id: "projet3", nom: "Projet 3", desc: "Vélos en libre service connectés" }
+        ]
+    },
+    2: {
+        titre: "Phase 2 — Éducation & Culture",
+        projets: [
+            { id: "projet1", nom: "Projet 1", desc: "Plateforme éducative en ligne" },
+            { id: "projet2", nom: "Projet 2", desc: "Bibliothèque numérique gratuite" },
+            { id: "projet3", nom: "Projet 3", desc: "Réseau d'échange de compétences" }
+        ]
+    },
+    3: {
+        titre: "Phase 3 — Tech & Innovation",
+        projets: [
+            { id: "projet1", nom: "Projet 1", desc: "IA pour la santé préventive" },
+            { id: "projet2", nom: "Projet 2", desc: "Impression 3D solidaire" },
+            { id: "projet3", nom: "Projet 3", desc: "Réseau mesh communautaire" }
+        ]
+    }
+};
+
+const params = new URLSearchParams(window.location.search);
+const phase = params.get('phase') || 1;
+const data = phases[phase];
+
+document.getElementById('titre-phase').textContent = data.titre;
+
+const container = document.getElementById('liste-projets');
+container.innerHTML = data.projets.map(p => `
+    <div class="projet">
+        <h2>${p.nom}</h2>
+        <p>${p.desc}</p>
+        <button onclick="voter('${p.id}')">Voter</button>
+    </div>
+`).join('');
+
+function voter(id) {
+    fetch("api.php", {
+        method: "POST",
+        body: new URLSearchParams({ projet: id })
+    })
+    .then(r => r.json())
+    .then(res => {
+        if (res.error) {
+            alert("Erreur : " + res.error);
+        } else {
+            alert("Votre vote a bien été enregistré !");
+        }
+    })
+    .catch(err => {
+        console.error("Erreur de connexion avec le serveur PHP:", err);
+        alert("Impossible d'enregistrer le vote.");
+    });
+}
+
+function admin() {
+    let mdp = prompt("Mot de passe administrateur :");
+    if (mdp === "123") {
+        afficherResultats(mdp);
+    } else if (mdp !== null) {
+        alert("Mot de passe incorrect");
+    }
+}
+
+function afficherResultats(motDePasse) {
+    fetch(`api.php?action=get&password=${motDePasse}`)
+        .then(r => {
+            if (!r.ok) throw new Error("Accès refusé. Mot de passe invalide.");
+            return r.json();
+        })
+        .then(data => {
+            document.getElementById("r1").textContent = "Projet 1 : " + (data.projet1 || 0) + " votes";
+            document.getElementById("r2").textContent = "Projet 2 : " + (data.projet2 || 0) + " votes";
+            document.getElementById("r3").textContent = "Projet 3 : " + (data.projet3 || 0) + " votes";
+            document.getElementById("resultats").style.display = "block";
+            document.getElementById("resultats").scrollIntoView({ behavior: 'smooth' });
+        })
+        .catch(error => {
+            alert(error.message);
+        });
+}
+</script>
+
+</body>
+</html>
